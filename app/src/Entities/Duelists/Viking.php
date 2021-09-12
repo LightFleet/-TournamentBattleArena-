@@ -1,9 +1,11 @@
 <?php
-namespace Tournament\Entities;
+namespace Tournament\Entities\Duelists;
 
-class Viking extends Duelist implements DuelistInterface
+class Viking extends Duelist
 {
-    public function __construct($role = null)
+    private $hitPoints;
+
+    public function __construct($type = null)
     {
 
     }
@@ -16,10 +18,5 @@ class Viking extends Duelist implements DuelistInterface
     public function equip($inventoryItem) : DuelistInterface
     {
         return $this;
-    }
-
-    public function hitPoints()
-    {
-
     }
 }

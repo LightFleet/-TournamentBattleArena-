@@ -2,7 +2,7 @@
 namespace Tournament;
 
 
-use Tournament\Entities\{Viking,Swordsman,Highlander};
+use Tournament\Entities\Duelists\{Viking,Swordsman,Highlander};
 
 /**
  * This is a duel simulation

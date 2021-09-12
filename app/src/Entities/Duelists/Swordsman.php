@@ -1,9 +1,11 @@
 <?php
-namespace Tournament\Entities;
+namespace Tournament\Entities\Duelists;
 
-class Highlander extends Duelist implements DuelistInterface
+class Swordsman extends Duelist
 {
-    public function __construct($role = null)
+    private $hitPoints;
+
+    public function __construct($type = null)
     {
 
     }
@@ -17,9 +19,5 @@ class Highlander extends Duelist implements DuelistInterface
     {
         return $this;
     }
-
-    public function hitPoints()
-    {
-
-    }
 }
+
