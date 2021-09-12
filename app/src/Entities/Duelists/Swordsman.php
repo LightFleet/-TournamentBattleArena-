@@ -3,16 +3,12 @@ namespace Tournament\Entities\Duelists;
 
 class Swordsman extends Duelist
 {
-    private $hitPoints;
+    public $hitPoints = 100;
+    public $damage = 5;
 
     public function __construct($type = null)
     {
-
-    }
-
-    public function engage(DuelistInterface $enemy)
-    {
-
+        parent::__construct($type);
     }
 
     public function equip($inventoryItem) : DuelistInterface

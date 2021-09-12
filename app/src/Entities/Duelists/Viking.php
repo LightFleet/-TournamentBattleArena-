@@ -3,16 +3,12 @@ namespace Tournament\Entities\Duelists;
 
 class Viking extends Duelist
 {
-    private $hitPoints;
+    private $hitPoints = 120;
+    public $damage = 6;
 
     public function __construct($type = null)
     {
-
-    }
-
-    public function engage(DuelistInterface $enemy)
-    {
-
+        parent::__construct($type);
     }
 
     public function equip($inventoryItem) : DuelistInterface
