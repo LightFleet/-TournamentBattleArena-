@@ -9,32 +9,31 @@ use Tournament\Entities\Duelists\DuelistsTypes\DuelistTypeInterface;
 use Tournament\Interactors\DuelInteractor;
 use Tournament\Interactors\DuelInteractorInterface;
 
-class Duelist extends AbstractDuelist
+abstract class AbstractDuelist implements DuelistInterface
 {
     /**
      * @var DuelistTypeInterface
      */
     private $type;
 
-    /**
-     * @var DuelInteractor
-     */
-    public $duel;
-
     public function __construct($type = null)
     {
         $this->type = $type;
-        parent::__construct();
+        $this->duel = new DuelInteractor();
+    }
+
+    public function getClassName() : string
+    {
+        $path = explode('\\', get_called_class());
+        return array_pop($path);
     }
 
     public function hitPoints() : int
     {
-        return $this->hitPoints;
     }
 
     public function engage(DuelistInterface $enemy)
     {
-        $this->duel->fightToTheDeath($this, $enemy);
     }
 
     public function equip($inventoryItem) : DuelistInterface
@@ -44,11 +43,10 @@ class Duelist extends AbstractDuelist
 
     public function getPunch(DuelistInterface $enemy)
     {
-        $this->hitPoints -= $enemy->damage;
+
     }
 
     public function isAlive() : bool
     {
-        return $this->hitPoints >= 0;
     }
 }
