@@ -3,7 +3,7 @@ namespace Tournament\Entities\Duelists;
 
 class Highlander extends Duelist implements DuelistInterface
 {
-    private $hitPoints;
+    protected $hitPoints;
     public $damage = 12;
 
     public function __construct($type = null)

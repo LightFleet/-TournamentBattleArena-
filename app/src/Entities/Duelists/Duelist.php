@@ -34,7 +34,7 @@ class Duelist extends AbstractDuelist
 
     public function engage(DuelistInterface $enemy)
     {
-        $this->duel->fightToTheDeath($this, $enemy);
+        $this->duel->fightTillTheDeath($this, $enemy);
     }
 
     public function equip($inventoryItem) : DuelistInterface
@@ -45,10 +45,14 @@ class Duelist extends AbstractDuelist
     public function getPunch(DuelistInterface $enemy)
     {
         $this->hitPoints -= $enemy->damage;
+        $this->hitPoints = $this->isAlive() ? $this->hitPoints : 0;
+
+        print_r($this->getClassName() . ' gets '. $enemy->damage . ' damage by a ' . $enemy->getClassName() .'! HP Left: ' . $this->hitPoints() . PHP_EOL);
+
     }
 
     public function isAlive() : bool
     {
-        return $this->hitPoints >= 0;
+        return $this->hitPoints > 0;
     }
 }

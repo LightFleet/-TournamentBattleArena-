@@ -13,12 +13,11 @@ class DuelInteractor implements DuelInteractorInterface
      * @param DuelistInterface $duelist
      * @param DuelistInterface $enemy
      */
-    public function fightToTheDeath(DuelistInterface $duelist, DuelistInterface $enemy)
+    public function fightTillTheDeath(DuelistInterface $duelist, DuelistInterface $enemy)
     {
-        while ($duelist->isAlive()){
+        while ($duelist->isAlive() or !$enemy->isAlive()){
+            $enemy->getPunch($duelist);
             $duelist->getPunch($enemy);
-            var_dump('Hit! HP Left: ' . $duelist->hitPoints());
         }
-        var_dump($duelist->getClassName() . ' is Dead!!!' . PHP_EOL . 'Exiting...'); exit;
     }
 }
