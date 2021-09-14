@@ -28,17 +28,13 @@ class DuelInteractor implements DuelInteractorInterface
 
     public function fightTillTheDeath()
     {
-        while (true){
-
+        do {
             $this->enemy->getPunch($this->duelist);
             $this->duelist->getPunch($this->enemy);
 
-            if ($this->someoneIsDead()){
-                break;
-            }
-
             $this->round++;
-        }
+
+        } while (!$this->someoneIsDead());
     }
 
     public function someoneIsDead() : bool
