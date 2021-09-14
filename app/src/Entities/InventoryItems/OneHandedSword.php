@@ -11,8 +11,13 @@ class OneHandedSword implements InventoryItemInterface
     public function __construct( DuelistInterface $owner )
     {
         $this->owner = $owner;
+        $this->modifyOwner();
+    }
+
+    public function modifyOwner(  )
+    {
         $this->owner->damage = 5;
-        $this->owner->hasSword = true;
+        $this->owner->hasOneHandedSword = true;
     }
 }
 

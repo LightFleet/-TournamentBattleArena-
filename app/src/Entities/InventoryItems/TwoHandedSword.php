@@ -11,6 +11,10 @@ class TwoHandedSword implements InventoryItemInterface
     public function __construct( DuelistInterface $owner )
     {
         $this->owner = $owner;
+    }
+
+    public function modifyOwner(  )
+    {
         $this->owner->damage = 12;
         $this->owner->hasSword = true;
     }

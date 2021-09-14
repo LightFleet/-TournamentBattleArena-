@@ -13,6 +13,11 @@ class Buckler implements InventoryItemInterface
     public function __construct( DuelistInterface $owner )
     {
         $this->owner = $owner;
+        $this->modifyOwner();
+    }
+
+    public function modifyOwner(  )
+    {
         $this->owner->hasBuckler = true;
     }
 
