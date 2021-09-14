@@ -45,7 +45,7 @@ class TournamentTest extends \PHPUnit_Framework_TestCase
      * a Great Sword is a two handed sword deliver 12 damages, but can attack only 2 every 3)(attack ; attack ; no attack)
      * an armor : reduce all received damages by 3 & reduce delivered damages by one
      */
-    public function testArmoredSwordsmanVsViking()
+    public function testArmoredSwordsmanVsHighlander()
     {
         $highlander = new Highlander();
         $swordsman = (new Swordsman())

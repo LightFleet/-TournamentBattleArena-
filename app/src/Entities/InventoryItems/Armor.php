@@ -22,7 +22,8 @@ class Armor implements InventoryItemInterface
     public function modifyOwner(  )
     {
         $this->owner->hasArmor = true;
-        $this->owner->buffArmor($this->armorBuffValue);
+        $this->owner->buffParameter('armor', $this->armorBuffValue);
+        $this->owner->debuffParameter('damage', $this->damageDebuffValue);
     }
 }
 

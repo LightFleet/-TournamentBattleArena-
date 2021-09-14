@@ -43,15 +43,21 @@ abstract class AbstractDuelist implements DuelistInterface
         $this->type = $type;
     }
 
+    public function buffArmor(int $value)
+    {
+        $this->armor += $value;
+    }
+
     public function getClassName() : string
     {
         $path = explode( '\\', get_called_class() );
         return array_pop( $path );
     }
 
-    public function buffArmor(int $value)
+    private function inventoryItemEquipped( string $itemName )
     {
-        $this->armor += $value;
+        $hasItem = "has" . ucwords($itemName);
+        return !empty($this->{$hasItem});
     }
 
     public function engage(DuelistInterface $enemy)
@@ -63,7 +69,7 @@ abstract class AbstractDuelist implements DuelistInterface
 
     public function getPunch(DuelistInterface $enemy)
     {
-        if(!$this->damageIsBlocked($enemy)){
+        if(!$this->enemyDamageIsBlocked($enemy)){
             $this->hitPoints -= ($enemy->damage - $this->armor);
             $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
         }
@@ -78,7 +84,7 @@ abstract class AbstractDuelist implements DuelistInterface
         return $this;
     }
 
-    public function damageIsBlocked($enemy) : bool
+    public function enemyDamageIsBlocked( $enemy) : bool
     {
         if (!$this->inventoryItemEquipped('buckler')){
             return false;
@@ -98,11 +104,5 @@ abstract class AbstractDuelist implements DuelistInterface
         $buckler->canBlockHit = !$buckler->canBlockHit;
 
         return true;
-    }
-
-    private function inventoryItemEquipped( string $itemName )
-    {
-        $hasItem = "has" . ucwords($itemName);
-        return !empty($this->{$hasItem});
     }
 }
