@@ -123,7 +123,6 @@ abstract class AbstractDuelist implements DuelistInterface
     private function receiveDamage( DuelistInterface $enemy )
     {
         $this->hitPoints -= ($enemy->damage - $this->armor);
-        print_r(PHP_EOL . $this->getClassName() . " received $enemy->damage damage and blocked $this->armor! HP left - " . $this->hitPoints . PHP_EOL);
         $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
     }
 }
