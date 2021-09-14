@@ -10,9 +10,4 @@ class Highlander extends Duelist implements DuelistInterface
     {
         parent::__construct($type);
     }
-
-    public function equip($inventoryItem) : DuelistInterface
-    {
-        return $this;
-    }
 }

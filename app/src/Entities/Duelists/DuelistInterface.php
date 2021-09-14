@@ -13,7 +13,7 @@ interface DuelistInterface
 
     public function engage(DuelistInterface $enemy);
 
-    public function equip($inventoryItem): DuelistInterface;
+    public function equip($inventoryItem);
 
     public function hitPoints(): int;
 

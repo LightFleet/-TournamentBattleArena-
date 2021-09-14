@@ -15,9 +15,12 @@ class DuelInteractor implements DuelInteractorInterface
      */
     public function fightTillTheDeath(DuelistInterface $duelist, DuelistInterface $enemy)
     {
-        while ($duelist->isAlive() or !$enemy->isAlive()){
+        while (true){
             $enemy->getPunch($duelist);
             $duelist->getPunch($enemy);
+            if (!$duelist->isAlive() or !$enemy->isAlive()){
+                break;
+            }
         }
     }
 }
