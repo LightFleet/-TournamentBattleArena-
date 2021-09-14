@@ -4,7 +4,6 @@
 namespace Tournament\Entities\Duelists;
 
 
-use Tournament\Entities\Duelists\DuelistInterface;
 use Tournament\Entities\Duelists\DuelistsTypes\DuelistTypeInterface;
 use Tournament\Entities\Duelists\DuelistsTypes\Veteran;
 use Tournament\Entities\Duelists\DuelistsTypes\Vicious;
@@ -19,9 +18,9 @@ use Tournament\Interactors\DuelInteractorInterface;
 abstract class AbstractDuelist implements DuelistInterface
 {
     /**
-     * @var DuelistTypeInterface[]
+     * @var DuelistTypeInterface
      */
-    private $types;
+    private $type;
 
     /**
      * @var DuelInteractor
@@ -31,6 +30,8 @@ abstract class AbstractDuelist implements DuelistInterface
     private $inventoryItems = [];
 
     private $armor = 0;
+
+    private $damageFromBuffs = 0;
 
     const AVAILABLE_INVENTORY_ITEMS = [
         'one-handed-sword' => OneHandedSword::class,
@@ -48,35 +49,39 @@ abstract class AbstractDuelist implements DuelistInterface
     public function __construct( $type = null )
     {
         $this->duel = new DuelInteractor();
-        $this->addType($type);
+        $this->setType($type);
     }
 
-    private function addType( $type )
+    private function setType($type)
     {
         if ($type){
             $typeClassName = self::AVAILABLE_TYPES[$type];
-            $this->types[$type] = new $typeClassName($this);
+            $this->type = new $typeClassName($this);
         }
     }
 
     public function equip( $inventoryItem )
     {
-        $inventoryItemClass = self::AVAILABLE_INVENTORY_ITEMS[$inventoryItem];
-        $this->inventoryItems[$inventoryItem] = new $inventoryItemClass($this);
+        $inventoryItemClassName = self::AVAILABLE_INVENTORY_ITEMS[$inventoryItem];
+        $this->inventoryItems[$inventoryItem] = new $inventoryItemClassName($this);
 
         return $this;
     }
+
     public function engage(DuelistInterface $enemy)
     {
         $this->duel->startDuel($this, $enemy);
     }
 
-
     public function getPunch(DuelistInterface $enemy)
     {
         if($enemy->canAttackThisTurn() && !$this->enemyDamageIsBlocked($enemy)){
             $this->receiveDamage($enemy);
-            print_r(PHP_EOL. PHP_EOL. $this->getClassName() . " got $enemy->damage damage and blocked $this->armor! HP left: $this->hitPoints\n");
+            print_r(PHP_EOL. PHP_EOL. $this->getClassName() . " got $enemy->damage damage and blocked $this->armor! ". $this->getClassName()." HP left: $this->hitPoints\n");
+        }
+
+        if($enemy->type instanceof Vicious){
+            $enemy->type->reducePosionByOne();
         }
     }
 
@@ -140,19 +145,38 @@ abstract class AbstractDuelist implements DuelistInterface
 
     private function receiveDamage( DuelistInterface $enemy )
     {
-        $this->hitPoints -= ($enemy->damage - $this->armor);
-        $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
+        $this->hitPoints = $this->calculateDamage($enemy);
 
-        if (!empty($this->types['Veteran'])){
-            var_dump($this->initialHitPoints*0.3);exit;
-        }
-        if (!empty($this->types['Veteran']) && ($this->hitPoints < ($this->initialHitPoints*0.3)) {
-            $this->types['Veteran']->giveOwnerBerkerkBuff();
+        if ($this->type instanceof Veteran) {
+            if(!$this->type->typeBuffWorks($this) && $this->hitPointsPercentage() < 30){
+                $this->type->giveOwnerTypeBuff($this);
+            }
         }
     }
 
     private function hasType( string $string )
     {
         return !empty($this->{$hasItem});
+    }
+
+    private function hitPointsPercentage()
+    {
+        return round(($this->hitPoints/$this->initialHitPoints) * 100);
+    }
+
+    private function calculateDamage(DuelistInterface $enemy) : int
+    {
+        if($enemy->type instanceof Vicious){
+            if($enemy->type->typeBuffWorks($enemy)){
+                //тот момент который надо поправить, перезатирается equip'ом дамаг и не идёт в учёт яд
+                $enemy->damage = 25;
+            } else{
+                $enemy->damage = 5;
+            }
+        }
+
+        $hp = $this->hitPoints - ($enemy->damage - $this->armor);
+        $hp = $hp > 0 ? $hp : 0;
+        return $hp;
     }
 }

@@ -8,21 +8,17 @@ use Tournament\Entities\Duelists\DuelistInterface;
 
 class Veteran implements DuelistTypeInterface
 {
-    private $damageBuffCoeff = 1.3;
+    private $damageBuffCoeff = 2;
+    private $berserkMode = false;
 
-    /**
-     * @var DuelistInterface
-     */
-    private $owner;
-
-    public function __construct( DuelistInterface $owner )
+    public function giveOwnerTypeBuff(DuelistInterface $duelist)
     {
-        $this->owner = $owner;
+        $this->berserkMode = true;
+        $duelist->multiplyParameter('damage', $this->damageBuffCoeff);
     }
 
-    public function giveOwnerBerkerkBuff( )
+    public function typeBuffWorks(DuelistInterface $duelist) : bool
     {
-        var_dump($this->owner->initialHitPoints); exit;
-        $this->owner->multiplyParameter('damage', 2);
+        return $this->berserkMode;
     }
 }

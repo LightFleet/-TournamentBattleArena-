@@ -8,31 +8,21 @@ use Tournament\Entities\Duelists\DuelistInterface;
 
 class Vicious implements DuelistTypeInterface
 {
-    private $poisonDamageBuff = 20;
-    private $attacksCounter = 0;
+    public $poisonDamageBuff = 20;
+    private $poisonLeftForAttacks = 2;
 
-    /**
-     * @var DuelistInterface
-     */
-    private $owner;
-
-    public function __construct( DuelistInterface $owner )
+    public function giveOwnerTypeBuff(DuelistInterface $duelist)
     {
-        $this->owner = $owner;
-        $this->modifyOwner();
+        $duelist->buffParameter('damageFromBuffs', $this->poisonDamageBuff);
     }
 
-    public function modifyOwner(  )
+    public function typeBuffWorks(DuelistInterface $duelist = null) : bool
     {
-        $this->usePoison();
+        return $this->poisonLeftForAttacks > 0;
     }
 
-    public function usePoison(  )
+    public function reducePosionByOne()
     {
-        $this->owner->buffParameter('damage', $this->poisonDamageBuff);
-
-        if($this->attacksCounter == 2){
-            $this->owner->debuffParameter('damage', $this->poisonDamageBuff);
-        }
+        return $this->poisonLeftForAttacks--;
     }
 }
