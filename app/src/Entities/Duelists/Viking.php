@@ -3,7 +3,7 @@ namespace Tournament\Entities\Duelists;
 
 class Viking extends Duelist
 {
-    protected $hitPoints = 120;
+    public $initialHitPoints = 120, $hitPoints = 120;
     public $damage;
 
     public function __construct($type = null)

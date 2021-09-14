@@ -3,7 +3,7 @@ namespace Tournament\Entities\Duelists;
 
 class Swordsman extends Duelist
 {
-    protected $hitPoints = 100;
+    public $initialHitPoints = 100, $hitPoints = 100;
     public $damage;
 
     public function __construct($type = null)
@@ -12,4 +12,3 @@ class Swordsman extends Duelist
         parent::__construct($type);
     }
 }
-

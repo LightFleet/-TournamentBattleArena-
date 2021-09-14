@@ -26,6 +26,8 @@ class DuelInteractor implements DuelInteractorInterface
         $this->enemy = $enemy;
 
         $this->fightTillTheDeath();
+
+        $this->round++;
     }
 
     public function fightTillTheDeath()
