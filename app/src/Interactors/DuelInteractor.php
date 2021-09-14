@@ -9,8 +9,6 @@ use Tournament\Entities\Duelists\DuelistInterface;
 
 class DuelInteractor implements DuelInteractorInterface
 {
-    public $round = 0;
-
     public $duelist;
 
     public $enemy;
@@ -26,8 +24,6 @@ class DuelInteractor implements DuelInteractorInterface
         $this->enemy = $enemy;
 
         $this->fightTillTheDeath();
-
-        $this->round++;
     }
 
     public function fightTillTheDeath()
@@ -35,8 +31,6 @@ class DuelInteractor implements DuelInteractorInterface
         do {
             $this->enemy->getPunch($this->duelist);
             $this->duelist->getPunch($this->enemy);
-
-            $this->round++;
 
         } while (!$this->someoneIsDead());
     }
