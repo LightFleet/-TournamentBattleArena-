@@ -8,7 +8,7 @@ class Highlander extends Duelist implements DuelistInterface
 
     public function __construct($type = null)
     {
-        $this->equip('two-handed-sword');
+        $this->equip('greatSword');
         parent::__construct($type);
     }
 }

@@ -10,7 +10,7 @@ use Tournament\Entities\InventoryItems\Armor;
 use Tournament\Entities\InventoryItems\Axe;
 use Tournament\Entities\InventoryItems\Buckler;
 use Tournament\Entities\InventoryItems\OneHandedSword;
-use Tournament\Entities\InventoryItems\TwoHandedSword;
+use Tournament\Entities\InventoryItems\GreatSword;
 use Tournament\Interactors\DuelInteractor;
 use Tournament\Interactors\DuelInteractorInterface;
 
@@ -32,7 +32,7 @@ abstract class AbstractDuelist implements DuelistInterface
 
     const AVAILABLE_INVENTORY_ITEMS = [
         'one-handed-sword' => OneHandedSword::class,
-        'two-handed-sword' => TwoHandedSword::class,
+        'greatSword' => GreatSword::class,
         'buckler' => Buckler::class,
         'armor' => Armor::class,
         'axe' => Axe::class
@@ -40,12 +40,19 @@ abstract class AbstractDuelist implements DuelistInterface
 
     public function __construct( $type = null )
     {
+        $this->duel = new DuelInteractor();
+
         $this->type = $type;
     }
 
-    public function buffArmor(int $value)
+    public function buffParameter($name, int $value)
     {
-        $this->armor += $value;
+        $this->{$name} += $value;
+    }
+
+    public function debuffParameter($name, int $value)
+    {
+        $this->{$name} -= $value;
     }
 
     public function getClassName() : string
@@ -57,21 +64,19 @@ abstract class AbstractDuelist implements DuelistInterface
     private function inventoryItemEquipped( string $itemName )
     {
         $hasItem = "has" . ucwords($itemName);
+
         return !empty($this->{$hasItem});
     }
 
     public function engage(DuelistInterface $enemy)
     {
-        $duel = new DuelInteractor($this, $enemy);
-
-        $duel->fightTillTheDeath();
+        $this->duel->startDuel($this, $enemy);
     }
 
     public function getPunch(DuelistInterface $enemy)
     {
-        if(!$this->enemyDamageIsBlocked($enemy)){
-            $this->hitPoints -= ($enemy->damage - $this->armor);
-            $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
+        if($enemy->canAttackThisTurn() && !$this->enemyDamageIsBlocked($enemy)){
+            $this->receiveDamage($enemy);
         }
     }
 
@@ -84,7 +89,7 @@ abstract class AbstractDuelist implements DuelistInterface
         return $this;
     }
 
-    public function enemyDamageIsBlocked( $enemy) : bool
+    public function enemyDamageIsBlocked($enemy) : bool
     {
         if (!$this->inventoryItemEquipped('buckler')){
             return false;
@@ -104,5 +109,21 @@ abstract class AbstractDuelist implements DuelistInterface
         $buckler->canBlockHit = !$buckler->canBlockHit;
 
         return true;
+    }
+
+    public function canAttackThisTurn() : bool
+    {
+        if ($this->inventoryItemEquipped('greatSword')){
+            $greatSword = $this->inventoryItems['greatSword'];
+            return $greatSword->canAttackThisTurn();
+        }
+        return true;
+    }
+
+    private function receiveDamage( DuelistInterface $enemy )
+    {
+        $this->hitPoints -= ($enemy->damage - $this->armor);
+        print_r(PHP_EOL . $this->getClassName() . " received $enemy->damage damage and blocked $this->armor! HP left - " . $this->hitPoints . PHP_EOL);
+        $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
     }
 }

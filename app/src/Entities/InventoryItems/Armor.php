@@ -7,6 +7,7 @@ use Tournament\Entities\InventoryItems\InventoryItemInterface;
 class Armor implements InventoryItemInterface
 {
     private $armorBuffValue = 3;
+    private $damageDebuffValue = 1;
 
     /**
      * @var DuelistInterface

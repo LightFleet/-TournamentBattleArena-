@@ -20,10 +20,12 @@ class DuelInteractor implements DuelInteractorInterface
      * @param DuelistInterface $enemy
      */
 
-    public function __construct(DuelistInterface $duelist, DuelistInterface $enemy)
-    {
+    public function startDuel(DuelistInterface $duelist, DuelistInterface $enemy){
+
         $this->duelist = $duelist;
         $this->enemy = $enemy;
+
+        $this->fightTillTheDeath();
     }
 
     public function fightTillTheDeath()

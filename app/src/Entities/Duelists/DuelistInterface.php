@@ -20,4 +20,6 @@ interface DuelistInterface
     public function getPunch(DuelistInterface $enemy);
 
     public function isAlive(): bool;
+
+    public function canAttackThisTurn(): bool;
 }
