@@ -21,7 +21,14 @@ abstract class AbstractDuelist implements DuelistInterface
      */
     private $type;
 
+    /**
+     * @var DuelInteractor
+     */
+    public $duel;
+
     private $inventoryItems = [];
+
+    private $armor = 0;
 
     const AVAILABLE_INVENTORY_ITEMS = [
         'one-handed-sword' => OneHandedSword::class,
@@ -42,6 +49,11 @@ abstract class AbstractDuelist implements DuelistInterface
         return array_pop( $path );
     }
 
+    public function buffArmor(int $value)
+    {
+        $this->armor += $value;
+    }
+
     public function engage(DuelistInterface $enemy)
     {
         $duel = new DuelInteractor($this, $enemy);
@@ -52,7 +64,7 @@ abstract class AbstractDuelist implements DuelistInterface
     public function getPunch(DuelistInterface $enemy)
     {
         if(!$this->damageIsBlocked($enemy)){
-            $this->hitPoints -= $enemy->damage;
+            $this->hitPoints -= ($enemy->damage - $this->armor);
             $this->hitPoints = $this->hitPoints > 0 ? $this->hitPoints : 0;
         }
     }
@@ -90,8 +102,7 @@ abstract class AbstractDuelist implements DuelistInterface
 
     private function inventoryItemEquipped( string $itemName )
     {
-        $hasItem = "has" . strtoupper($itemName);
-        var_dump($hasItem); exit;
+        $hasItem = "has" . ucwords($itemName);
         return !empty($this->{$hasItem});
     }
 }

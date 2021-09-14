@@ -3,11 +3,7 @@
 
 namespace Tournament\Entities\Duelists;
 
-
-use Tournament\Entities\Duelists\DuelistInterface;
 use Tournament\Entities\Duelists\DuelistsTypes\DuelistTypeInterface;
-use Tournament\Interactors\DuelInteractor;
-use Tournament\Interactors\DuelInteractorInterface;
 
 class Duelist extends AbstractDuelist
 {
@@ -15,11 +11,6 @@ class Duelist extends AbstractDuelist
      * @var DuelistTypeInterface
      */
     private $type;
-
-    /**
-     * @var DuelInteractor
-     */
-    public $duel;
 
     public function __construct($type = null)
     {
