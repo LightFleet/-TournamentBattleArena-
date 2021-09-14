@@ -3,11 +3,11 @@ namespace Tournament\Entities\Duelists;
 
 class Highlander extends Duelist implements DuelistInterface
 {
-    protected $hitPoints;
-    public $damage = 12;
+    protected $hitPoints = 150;
 
     public function __construct($type = null)
     {
+        $this->equip('two-handed-sword');
         parent::__construct($type);
     }
 }
