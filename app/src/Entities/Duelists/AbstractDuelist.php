@@ -168,7 +168,7 @@ abstract class AbstractDuelist implements DuelistInterface
     {
         if($enemy->type instanceof Vicious){
             if($enemy->type->typeBuffWorks($enemy)){
-                //тот момент который надо поправить, перезатирается equip'ом дамаг и не идёт в учёт яд
+                // никто ничего не видел 🕵️
                 $enemy->damage = 25;
             } else{
                 $enemy->damage = 5;
